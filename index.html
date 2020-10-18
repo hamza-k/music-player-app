@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music player</title>
+    <link href="https://css.gg/css?=|play-button|play-list|play-pause|play-track-prev|play-track-next|heart" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div id="app">
+        <audio id="app__audio" ref="audio" @timeupdate='onTimeUpdateListener' preload="metadata">
+            <source :src="activeTrack.trackPath" id="app__audio_src" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          
+        <img :src="activeTrack.trackCover" class="app__bg" alt="">
+        <div :class=" isTracklistOpen ? 'app__wrapper active' : 'app__wrapper' ">
+            <div class="tracklist" @click="toggleTracklist()">
+                <h3>Tracklist</h3>
+                <ul>
+                    <li v-for="track in trackList" @click="setTrackId(track.id)" :class=" { 'active' : track.id == activeTrackId} ">{{track.name}}</li>
+                </ul>
+            </div>
+            <div class="app__lector">
+                <img class="app__cover" :src="activeTrack.trackCover" alt="">
+                <div class="app__name">
+                    <h2 class="app__name_title">{{activeTrack.title}}</h2>
+                    <span class="app__name_author">
+                        {{activeTrack.author}}<span v-if="activeTrack.featuring.length"> ft. {{activeTrack.featuring.join(", ")}}</span>
+                    </span>
+                </div>
+                <div class="app__control">
+                    <div class="app__control_buttons">
+                        <i class="gg-play-list" @click="toggleTracklist()"></i>
+                        <i class="gg-play-track-prev" @click="setTrack('prev')"></i>
+                        <span class="pause-play-button">
+                            <i class="gg-play-pause" v-if="isPlaying" @click="setPause"></i>
+                            <i class="gg-play-button" v-else @click="setPlay"></i>
+                        </span>
+                        <i class="gg-play-track-next" @click="setTrack('next')"></i>
+                        <i class="gg-heart" @click="activeTrack.isLiked = !activeTrack.isLiked" :style="activeTrack.isLiked ? 'color: #e37d7d' : 'opacity: 0.15'"></i>
+                    </div>
+                    <div class="app__control_timer">
+                        <div class="app__control_timer__display">
+                            <span class="app__control_timer__progress">{{activeTrackCurrentTime | formatTime}}</span>
+                            <span class="app__control_timer__end">{{activeTrackDuration | formatTime}}</span>
+                        </div>
+                        <div class="app__control_timer__progressbar">
+                            <input 
+                                type="range" 
+                                min="0" 
+                                :max="activeTrackDuration" 
+                                :value="activeTrackCurrentTime"
+                                step='1'
+                                @change="setCurrentTime()"
+                                class="app__control_timer__slider">
+                                <span class="progressbar__bg">
+                                    <span class="progressbar__state" :style=" 'width : calc((' + activeTrackCurrentTime / activeTrackDuration + ') * 100%)' "></span>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
