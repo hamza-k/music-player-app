@@ -85,11 +85,15 @@ var musicPlayer = new Vue({
             let trackIdIndex = this.playlist.findIndex(el => el == this.activeTrackId)
             let totalTrack = this.playlist.length
             if (move == "prev") {
-                if (trackIdIndex == 0)
-                {
-                    trackIdIndex = totalTrack - 1
+                if ( this.activeTrackCurrentTime <= 2 ) {
+                    if (trackIdIndex == 0)
+                    {
+                        trackIdIndex = totalTrack - 1
+                    } else {
+                        trackIdIndex--
+                    }
                 } else {
-                    trackIdIndex--
+                    this.activeTrackCurrentTime = 0
                 }
             } else if (move == "next") {
                 if (trackIdIndex == totalTrack - 1)
