@@ -67,11 +67,12 @@ body {
 .app__control::before {
     content: "";
     border: solid 1px #e37d7d;
-    width: calc(100% - 60px);
+    width: calc(100% - 150px);
     height: 0;
     position: absolute;
     top: -20px;
     left: 50%;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.35);
     transform: translateX(-50%);
 }
 
